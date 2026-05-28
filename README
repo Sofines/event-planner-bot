@@ -1,0 +1,41 @@
+# event-planner-bot
+
+Small Discord bot for planning events across different timezones.
+
+Built with:
+
+* Node.js
+* discord.js
+
+## Commands
+
+```bash
+!ping
+!settimezone Africa/Tunis
+!mytimezone
+```
+
+## Setup
+
+```bash
+git clone <repo>
+cd event-planner-bot
+npm install
+```
+
+Create a `.env` file:
+
+```env
+DISCORD_TOKEN=your_token_here
+```
+
+Run the bot:
+
+```bash
+npm run dev
+```
+
+## Notes
+
+* `.env` is ignored with `.gitignore`
+* user data is stored locally in `src/data.json`
