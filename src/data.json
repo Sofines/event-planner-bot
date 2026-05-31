@@ -2,5 +2,11 @@
   "users": {
     "424226172323233794": "Africa/Tunis"
   },
-  "events": []
+  "events": [
+    {
+      "name": "GameNight",
+      "utcTime": "2026-06-01T20:00:00.000Z",
+      "creator": "424226172323233794"
+    }
+  ]
 }
