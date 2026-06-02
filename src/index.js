@@ -108,16 +108,33 @@ client.on("messageCreate", (message) => {
 
 if (message.content === "!events") {
   const data = loadData();
+  const userTz = data.users[message.author.id];
+
+  if (!userTz) {
+    return message.reply("❌ Set your timezone first using !settimezone");
+  }
 
   if (data.events.length === 0) {
     return message.reply("📭 No events yet.");
   }
 
-  const list = data.events
-    .map((e, i) => `${i + 1}. **${e.name}** — ${new Date(e.utcTime).toUTCString()}`)
-    .join("\n");
+  const formatted = data.events.map((event, i) => {
+    const utcDate = new Date(event.utcTime);
 
-  return message.reply(`📅 **Events:**\n${list}`);
+    const localTime = new Intl.DateTimeFormat("en-US", {
+      timeZone: userTz,
+      weekday: "short",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false
+    }).format(utcDate);
+
+    return `${i + 1}. **${event.name}** — ${localTime}`;
+  });
+
+  return message.reply(
+    `📅 Events for **${userTz}**:\n` + formatted.join("\n")
+  );
 }
 
 });
