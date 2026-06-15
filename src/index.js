@@ -39,41 +39,39 @@ client.on("interactionCreate", async (interaction) => {
 
   // /settimezone
   if (interaction.commandName === "settimezone") {
-    const timezone = interaction.options.getString("timezone");
+  const timezone = interaction.options.getString("timezone");
 
-    const validTimezones = Intl.supportedValuesOf("timeZone");
+  console.log("TZ INPUT:", timezone);
 
-    if (!validTimezones.includes(timezone)) {
-      return interaction.reply("❌ Invalid timezone.");
-    }
+  const validTimezones = Intl.supportedValuesOf("timeZone");
 
-    const data = loadData();
-
-    data.users[interaction.user.id] = timezone;
-
-    saveData(data);
-
-    return interaction.reply(
-      `✅ Timezone set to **${timezone}**`
-    );
+  if (!validTimezones.includes(timezone)) {
+    return interaction.reply("❌ Invalid timezone (use e.g. Africa/Tunis)");
   }
+
+  const data = loadData();
+
+  if (!data.users) data.users = {};
+
+  data.users[interaction.user.id] = timezone;
+
+  saveData(data);
+
+  return interaction.reply(`✅ Timezone set to **${timezone}**`);
+}
 
   // /mytimezone
   if (interaction.commandName === "mytimezone") {
-    const data = loadData();
+  const data = loadData();
 
-    const tz = data.users[interaction.user.id];
+  const tz = data.users?.[interaction.user.id];
 
-    if (!tz) {
-      return interaction.reply(
-        "❌ You haven't set a timezone yet."
-      );
-    }
-
-    return interaction.reply(
-      `🕒 Your timezone is **${tz}**`
-    );
+  if (!tz) {
+    return interaction.reply("❌ You haven't set a timezone yet.");
   }
+
+  return interaction.reply(`🕒 Your timezone is **${tz}**`);
+}
 
   // /events
   if (interaction.commandName === "events") {
@@ -110,5 +108,11 @@ client.on("interactionCreate", async (interaction) => {
     );
   }
 });
+
+client.on("error", console.error);
+
+client.on("warn", console.warn);
+
+process.on("unhandledRejection", console.error);
 
 client.login(process.env.DISCORD_TOKEN);
